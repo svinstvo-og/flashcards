@@ -1,9 +1,10 @@
-package com.example.flashcards.controller;
+package session.flash.controller;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +19,14 @@ import java.util.List;
 @Controller
 public class FlashcardController {
 
+    private final TaskExecutionProperties taskExecutionProperties;
     private List<Flashcard> flashcards;
     private List<Flashcard> incorrectFlashcards;
     private boolean showEnglish;
+
+    public FlashcardController(TaskExecutionProperties taskExecutionProperties) {
+        this.taskExecutionProperties = taskExecutionProperties;
+    }
 
     @GetMapping("/")
     public String startGame() {
@@ -58,6 +64,7 @@ public class FlashcardController {
     }
 
     private void loadFlashcards() {
+        int id = 1;
         flashcards = new ArrayList<>();
         incorrectFlashcards = new ArrayList<>();
 
@@ -66,11 +73,13 @@ public class FlashcardController {
 
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
+                System.out.println(row.getCell(0).getStringCellValue());
+                System.out.println(row.getCell(1).getStringCellValue());
                 if (row.getRowNum() == 0) continue; // Skip header row
-                int id = (int) row.getCell(0).getNumericCellValue();
-                String english = row.getCell(1).getStringCellValue();
-                String russian = row.getCell(2).getStringCellValue();
+                String english = row.getCell(0).getStringCellValue();
+                String russian = row.getCell(1).getStringCellValue();
                 flashcards.add(new Flashcard(id, english, russian));
+                id++;
             }
         } catch (Exception e) {
             e.printStackTrace();
