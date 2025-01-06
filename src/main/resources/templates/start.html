@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Flashcards - Start</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-
+<h1>Welcome to Flashcards!</h1>
+<form action="/start" method="post">
+    <label for="language">Choose the front of the cards:</label>
+    <select name="language" id="language">
+        <option value="english">English</option>
+        <option value="russian">Russian</option>
+    </select>
+    <button type="submit">Start Game</button>
+</form>
 </body>
 </html>

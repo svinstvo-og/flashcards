@@ -1,11 +1,16 @@
-package session.flash.controller;
+package com.example.flashcards.controller;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -56,11 +61,20 @@ public class FlashcardController {
         flashcards = new ArrayList<>();
         incorrectFlashcards = new ArrayList<>();
 
-        // Load words (replace this with Excel parsing logic if needed)
-        flashcards.add(new Flashcard(1, "ferry", "паром"));
-        flashcards.add(new Flashcard(2, "jumbo", "неофициальное название боенга"));
-        flashcards.add(new Flashcard(3, "cockpit", "кабина пилота"));
-        // Add more cards here...
+        try (InputStream inputStream = getClass().getResourceAsStream("/words.xlsx");
+             Workbook workbook = new XSSFWorkbook(inputStream)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) continue; // Skip header row
+                int id = (int) row.getCell(0).getNumericCellValue();
+                String english = row.getCell(1).getStringCellValue();
+                String russian = row.getCell(2).getStringCellValue();
+                flashcards.add(new Flashcard(id, english, russian));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Collections.shuffle(flashcards);
     }

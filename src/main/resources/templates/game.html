@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Flashcards - Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .card {
+            width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function flipCard() {
+            const front = document.getElementById("front");
+            const back = document.getElementById("back");
+            front.style.display = front.style.display === "none" ? "block" : "none";
+            back.style.display = back.style.display === "none" ? "block" : "none";
+        }
+    </script>
 </head>
 <body>
-
+<h1>Flashcards</h1>
+<div class="card" onclick="flipCard()">
+    <div id="front">
+        <p th:text="${showEnglish} ? ${flashcard.english} : ${flashcard.russian}"></p>
+    </div>
+    <div id="back" style="display:none;">
+        <p th:text="${showEnglish} ? ${flashcard.russian} : ${flashcard.english}"></p>
+    </div>
+</div>
+<form action="/answer" method="post">
+    <input type="hidden" name="id" th:value="${flashcard.id}" />
+    <button type="submit" name="correct" value="true">Correct</button>
+    <button type="submit" name="correct" value="false">Incorrect</button>
+</form>
 </body>
 </html>
