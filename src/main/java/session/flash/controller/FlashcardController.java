@@ -73,8 +73,8 @@ public class FlashcardController {
 
             Sheet sheet = workbook.getSheetAt(0);
             for (Row row : sheet) {
-                System.out.println(row.getCell(0).getStringCellValue());
-                System.out.println(row.getCell(1).getStringCellValue());
+                //System.out.println(row.getCell(0).getStringCellValue());
+                //System.out.println(row.getCell(1).getStringCellValue());
                 if (row.getRowNum() == 0) continue; // Skip header row
                 String english = row.getCell(0).getStringCellValue();
                 String russian = row.getCell(1).getStringCellValue();
